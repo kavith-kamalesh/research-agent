@@ -1,0 +1,27 @@
+# Environment & secrets
+.env
+*.env
+venv/
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Chat/memory data
+chat_history.db
+memory_db/
+
+# Voice output artifacts
+*.wav
+
+# OS files
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Obsidian vault (personal notes, shouldn't be in this repo)
+voices/
