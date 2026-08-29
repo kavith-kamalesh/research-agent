@@ -25,6 +25,15 @@ console.print("[dim]Type 'refine' to sharpen last report, 'forget' to wipe memor
 last_reply = ""
 voice_enabled = True
 
+PROTOCOL_OPTIONS = {
+    "1": "VERITAS",
+    "2": "GENESIS",
+    "3": "AXIOM",
+    "4": "SENTRY",
+    "5": "ORACLE",
+    "6": "HACKATHON",
+}
+
 while True:
     user_input = input("You: ")
 
@@ -37,7 +46,7 @@ while True:
         continue
 
     if user_input.lower() == "voice off":
-        voice_enabled = True
+        voice_enabled = False
         console.print("[yellow]Voice disabled.[/yellow]")
         continue
 
@@ -76,9 +85,25 @@ while True:
         console.print("[dim]This looks like a research question. Checking which protocol fits...[/dim]")
         suggestion = suggest_protocol(user_input)
         console.print(f"[bold yellow]{suggestion}[/bold yellow]")
-        confirm = input("Use this protocol? (yes / or type VERITAS, GENESIS, AXIOM, SENTRY, ORACLE, HACKATHON to override): ").strip()
-        if confirm.lower() not in ("yes", "y", ""):
-            user_input = f"[Use protocol {confirm.upper()}] {user_input}"
+
+        console.print("[bold cyan]Choose a protocol:[/bold cyan]")
+        console.print("  1) VERITAS   - testable/empirical questions")
+        console.print("  2) GENESIS   - engineering/design questions")
+        console.print("  3) AXIOM     - quantitative/optimization questions")
+        console.print("  4) SENTRY    - fast feasibility/sanity checks")
+        console.print("  5) ORACLE    - full deep investigation")
+        console.print("  6) HACKATHON - validate an idea against judging rubric")
+
+        chosen = None
+        while chosen is None:
+            selection = input("Enter a number (1-6): ").strip()
+            if selection in PROTOCOL_OPTIONS:
+                chosen = PROTOCOL_OPTIONS[selection]
+            else:
+                console.print("[red]Invalid choice. Please enter a number from 1 to 6.[/red]")
+
+        console.print(f"[green]Using protocol: {chosen}[/green]")
+        user_input = f"[Use protocol {chosen}] {user_input}"
 
     save_message("user", user_input)
     reply, history = run(user_input, history)

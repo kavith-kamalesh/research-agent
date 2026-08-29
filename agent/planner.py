@@ -5,7 +5,7 @@ from agent.hackathon_mode import HACKATHON_PROTOCOL
 from agent.tools.web_search import web_search, TOOLS
 import json
 
-client = LLMClient()
+client = LLMClient(model="openai/gpt-oss-120b", backend="groq")
 
 PROTOCOL_MAP = {
     "HACKATHON": HACKATHON_PROTOCOL,

@@ -15,11 +15,13 @@ def invoke_tool(tool_name, args=None):
         "action": "json",
         "args": args or {}
     }
-    response = requests.post(GATEWAY_URL, headers=headers, json=payload)
-    return response.json()
+    try:
+        response = requests.post(GATEWAY_URL, headers=headers, json=payload, timeout=30)
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        return {"error": f"OpenClaw connection failed: {e}"}
 
 def delegate_task(instruction, agent_id="main"):
-    """Send a task instruction to OpenClaw's agent to actually execute."""
     headers = {
         "Authorization": f"Bearer {GATEWAY_TOKEN}",
         "Content-Type": "application/json",
@@ -31,9 +33,13 @@ def delegate_task(instruction, agent_id="main"):
             {"role": "user", "content": instruction}
         ]
     }
-    response = requests.post(CHAT_URL, headers=headers, json=payload, timeout=120)
     try:
+        response = requests.post(CHAT_URL, headers=headers, json=payload, timeout=150)
         data = response.json()
         return data["choices"][0]["message"]["content"]
+    except requests.exceptions.Timeout:
+        return "OpenClaw took too long to respond and timed out. The task may have partially completed — check manually if needed."
+    except requests.exceptions.RequestException as e:
+        return f"OpenClaw connection error: {e}"
     except (KeyError, ValueError):
-        return f"Error: {response.status_code} - {response.text}"
+        return f"Error: unexpected response format ({response.status_code} - {response.text[:200]})"

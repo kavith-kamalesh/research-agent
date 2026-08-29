@@ -14,7 +14,7 @@ Message: "{message}"
 Respond with exactly one word: CASUAL or RESEARCH
 """
 
-router = LLMClient(model="qwen3:1.7b")
+router = LLMClient(model="openai/gpt-oss-120b", backend="groq")
 
 def classify_message(message):
     messages = [{"role": "user", "content": ROUTE_PROMPT.format(message=message)}]

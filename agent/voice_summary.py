@@ -15,7 +15,7 @@ Content: {content}
 
 
 
-summarizer = LLMClient(model="qwen3:1.7b")
+summarizer = LLMClient(model="openai/gpt-oss-120b", backend="groq")
 
 
 

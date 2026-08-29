@@ -21,7 +21,7 @@ RECOMMENDED: [P#]
 REASON: [1-2 sentences]
 """
 
-picker = LLMClient(model="qwen3:1.7b")
+picker = LLMClient(model="openai/gpt-oss-120b", backend="groq")
 
 def suggest_protocol(problem_text):
     messages = [{"role": "user", "content": PICKER_PROMPT.format(problem=problem_text)}]
